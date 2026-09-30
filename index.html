@@ -436,7 +436,11 @@ header.nav{position:fixed;inset:0 0 auto;z-index:20;backdrop-filter:blur(14px);b
 .nav .cta{padding:10px 18px;font-size:12px}
 .hero{position:relative;overflow:hidden;min-height:100svh;display:flex;align-items:flex-end;padding:140px 0 80px;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:url("https://i.vimeocdn.com/video/2207054323-a24bfd68f070e02d705d8355bfbba57bf6f4ddb85af2c02ccb52083d1f69c70b-d_1280") center/cover;filter:saturate(.9);transform:scale(1.05)}
-.hero-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,16,.55) 0%,rgba(11,13,16,.75) 55%,var(--bg) 100%)}
+.hero-video{position:absolute;inset:0;overflow:hidden;opacity:0;transition:opacity 1.2s}
+.hero-video.on{opacity:1}
+.hero-video iframe{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:100%;min-width:177.78vh;transform:translate(-50%,-50%);border:0;pointer-events:none}
+.hero-video.port iframe{width:100vw;height:177.78vw;min-width:56.25vh;min-height:100%}
+.hero-bg:after{z-index:1;content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,16,.55) 0%,rgba(11,13,16,.75) 55%,var(--bg) 100%)}
 .hero .wrap{position:relative}
 .hero h1{font-size:clamp(42px,8vw,104px);font-weight:800;max-width:14ch;margin-bottom:26px}
 .hero p{font-size:clamp(17px,2vw,21px);color:#d6dbe1;max-width:56ch;margin-bottom:36px}
@@ -511,7 +515,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--acc)}
 
 <main>
 <section class="hero">
-  <div class="hero-bg" role="img" aria-label="Bostadsfilm av CB Media"></div>
+  <div class="hero-bg" role="img" aria-label="Bostadsfilm av CB Media"><div class="hero-video" id="heroVideo" data-land="1231806692" data-port="1226401021"></div></div>
   <div class="wrap">
     <p class="eyebrow">Bostadsfilm · Boostad film · Hela Sverige</p>
     <h1>Bostadsfilm som <span class="acc">går viralt.</span></h1>
@@ -774,6 +778,11 @@ footer a{text-decoration:none}footer a:hover{color:var(--acc)}
 </div></footer>
 
 <script>
+(function(){var h=document.getElementById('heroVideo');if(!h||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+var port=innerHeight>innerWidth;var id=port?h.dataset.port:h.dataset.land;if(port)h.classList.add('port');
+var f=document.createElement('iframe');f.src='https://player.vimeo.com/video/'+id+'?background=1&autoplay=1&loop=1&muted=1&dnt=1';
+f.allow='autoplay; fullscreen';f.title='Bostadsfilm av CB Media';f.setAttribute('aria-hidden','true');f.tabIndex=-1;
+f.onload=function(){setTimeout(function(){h.classList.add('on')},600)};h.appendChild(f);})();
 document.querySelectorAll('.play').forEach(b=>b.addEventListener('click',()=>{
   if(b.querySelector('iframe'))return;
   const f=document.createElement('iframe');
